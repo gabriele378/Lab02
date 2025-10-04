@@ -1,14 +1,16 @@
-from csv import writer
+
 def carica_da_file(file_path):
     """Carica i libri dal file"""
     # TODO
 
     biblioteca = []
     with open(file_path, 'r', encoding = 'utf-8') as f:
-        sezioni = f.readline()
+        f.readline()
         for riga in f:
             campi = riga.rstrip().split(',')
-            biblioteca.append({'nome': campi[0],
+            while len(campi) < 5:
+                campi.append('')
+            biblioteca.append({'titolo': campi[0],
                                'autore': campi[1],
                                'anno' : campi[2],
                                'pagine': campi[3],
@@ -20,32 +22,44 @@ def carica_da_file(file_path):
 def aggiungi_libro(biblioteca, titolo, autore, anno, pagine, sezione, file_path):
     """Aggiunge un libro nella biblioteca"""
     # TODO
-    if titolo in biblioteca:
-        libro = None
-    else:
-        libro = True
-        biblioteca.append({'nome': titolo, 'autore': autore, 'anno': anno, 'pagine': pagine, 'sezione': sezione})
-        with open(file_path, 'a', encoding='utf-8') as f:
-            csv_writer = writer(f)
-            csv_writer.writerow([titolo, autore, anno, pagine, sezione])
+    for libro in biblioteca:
+        if libro['titolo'] == titolo:
+            return None
+
+    libro = {
+        'titolo': titolo,
+        'autore': autore,
+        'anno': anno,
+        'pagine': pagine,
+        'sezione': sezione
+    }
+    biblioteca.append(libro)
+    with open(file_path, 'a', encoding = 'utf-8') as f:
+        f.write(f"{titolo},{autore},{anno},{pagine},{sezione}\n")
 
     return libro
-
-
-
-
-
 
 
 
 def cerca_libro(biblioteca, titolo):
     """Cerca un libro nella biblioteca dato il titolo"""
     # TODO
+    for libro in biblioteca:
+        if libro['titolo'] == titolo:
+            return f"{libro['titolo']}, {libro['autore']}, {libro['anno']}, {libro['pagine']}, {libro['sezione']}"
+
+    return None
 
 
 def elenco_libri_sezione_per_titolo(biblioteca, sezione):
     """Ordina i titoli di una data sezione della biblioteca in ordine alfabetico"""
     # TODO
+
+    titoli = [libro['titolo']for libro in biblioteca if libro['sezione'] == sezione]
+    if not titoli:
+            return None
+
+    return sorted(titoli)
 
 
 def main():
