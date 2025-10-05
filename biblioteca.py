@@ -1,4 +1,4 @@
-#salto prima rigaa
+#salto prima riga
 def carica_da_file(file_path):
     """Carica i libri dal file"""
     # TODO
